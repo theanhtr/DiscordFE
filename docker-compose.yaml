@@ -1,0 +1,15 @@
+services:
+  discordfe:
+    container_name: discordfe
+    build: .
+    image: discord_fe:latest
+    ports:
+      - 1000:3000
+    expose:
+      - 1000
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
