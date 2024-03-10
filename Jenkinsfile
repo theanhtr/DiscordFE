@@ -29,5 +29,15 @@ pipeline{
         sh 'npm run build'
       }
     }
+
+    stage('sonarqube'){
+      steps{
+        script{
+          withSonarQubeEnv(credentialsId: 'sonarqube-credentials', installationName: 'SonarQube') {
+            sh 'sonar-scanner'
+          }
+        }
+      }
+    }
   }
 }
