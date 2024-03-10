@@ -1,6 +1,0 @@
-projectKey=discord-fe
-serverUrl=http://172.28.73.189:9000
-serverVersion=9.9.0.65466
-dashboardUrl=http://172.28.73.189:9000/dashboard?id=discord-fe
-ceTaskId=AY4osXaY1UFh3SREHS-4
-ceTaskUrl=http://172.28.73.189:9000/api/ce/task?id=AY4osXaY1UFh3SREHS-4
