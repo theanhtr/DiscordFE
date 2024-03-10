@@ -39,5 +39,19 @@ pipeline{
         }
       }
     }
+
+    stage("Quality Gate"){
+      steps{
+        script{
+          waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-credentials', timeout: 3000
+          def qg = waitForQualityGate()
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          } else {
+            echo 'Quality Gate passed'
+          }
+        }
+      }
+    }
   }
 }
