@@ -17,5 +17,23 @@ pipeline{
         git branch: 'master', credentialsId: 'git-credentials', url: 'https://github.com/theanhtr/DiscordFE.git'
       }
     }
+
+    stage('Install dependencies'){
+      steps{
+        sh 'npm install'
+      }
+    }
+
+    stage('Build'){
+      steps{
+        sh 'npm run build'
+      }
+    }
+
+    stage('Test'){
+      steps{
+        sh 'npm run test'
+      }
+    }
   }
 }
