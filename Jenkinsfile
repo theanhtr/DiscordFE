@@ -5,6 +5,14 @@ pipeline{
   tools{
     nodejs 'Node20'
   }
+  environment {
+    APP_NAME = "discord_fe"
+    RELEASE = "1.0.1"
+    DOCKER_USER = "theanh0906"
+    DOCKER_PASS = "dockerhub-credentials"
+    IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+    IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+  }
   stages{
     stage('Cleanup workspace'){
       steps{
@@ -49,6 +57,20 @@ pipeline{
             error "Pipeline aborted due to quality gate failure: ${qg.status}"
           } else {
             echo 'Quality Gate passed'
+          }
+        }
+      }
+    }
+
+    stage("Build and push docker image"){
+      steps{
+        script{
+          docker.withRegistry('', DOCKER_PASS) {
+            docker_image = docker.build("${IMAGE_NAME}")
+          }
+
+          docker.withRegistry('', DOCKER_PASS) {
+            docker_image.push("${IMAGE_TAG}")
           }
         }
       }
