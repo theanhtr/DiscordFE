@@ -27,55 +27,55 @@ pipeline{
       }
     }
 
-    // stage('Install dependencies'){
-    //   steps{
-    //     sh 'npm install'
-    //   }
-    // }
+    stage('Install dependencies'){
+      steps{
+        sh 'npm install'
+      }
+    }
 
-    // stage('Build'){
-    //   steps{
-    //     sh 'npm run build'
-    //   }
-    // }
+    stage('Build'){
+      steps{
+        sh 'npm run build'
+      }
+    }
 
-    // stage('sonarqube'){
-    //   steps{
-    //     script{
-    //       withSonarQubeEnv(credentialsId: 'sonarqube-credentials') {
-    //         sh 'npm run sonar'
-    //       }
-    //     }
-    //   }
-    // }
+    stage('sonarqube'){
+      steps{
+        script{
+          withSonarQubeEnv(credentialsId: 'sonarqube-credentials') {
+            sh 'npm run sonar'
+          }
+        }
+      }
+    }
 
-    // stage("Quality Gate"){
-    //   steps{
-    //     script{
-    //       waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-credentials', timeout: 3000
-    //       def qg = waitForQualityGate()
-    //       if (qg.status != 'OK') {
-    //         error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    //       } else {
-    //         echo 'Quality Gate passed'
-    //       }
-    //     }
-    //   }
-    // }
+    stage("Quality Gate"){
+      steps{
+        script{
+          waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-credentials', timeout: 3000
+          def qg = waitForQualityGate()
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          } else {
+            echo 'Quality Gate passed'
+          }
+        }
+      }
+    }
 
-    // stage("Build and push docker image"){
-    //   steps{
-    //     script{
-    //       docker.withRegistry('', DOCKER_PASS) {
-    //         docker_image = docker.build("${IMAGE_NAME}")
-    //       }
+    stage("Build and push docker image"){
+      steps{
+        script{
+          docker.withRegistry('', DOCKER_PASS) {
+            docker_image = docker.build("${IMAGE_NAME}")
+          }
 
-    //       docker.withRegistry('', DOCKER_PASS) {
-    //         docker_image.push("${IMAGE_TAG}")
-    //       }
-    //     }
-    //   }
-    // }
+          docker.withRegistry('', DOCKER_PASS) {
+            docker_image.push("${IMAGE_TAG}")
+          }
+        }
+      }
+    }
 
     stage("Trigger CD pipeline"){
       steps{
