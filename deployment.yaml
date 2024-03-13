@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord_fe
+  labels:
+    app: discord_fe
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: discord_fe
+      template:
+        metadata:
+          labels:
+            app: discord_fe
+        spec:
+          containers:
+            - name: discord_fe
+              image: theanh0906/discord_fe:1.0.1-29
+              resources:
+                limits:
+                  memory: "256Mi"
+                  cpu: "256m"
+                ports:
+                  containerPort: 8080
