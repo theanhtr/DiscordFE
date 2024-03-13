@@ -12,6 +12,7 @@ pipeline{
     DOCKER_PASS = "dockerhub-credentials"
     IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
     IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+    JENKINS_API_TOKEN = "${JENKINS_API_TOKEN}"
   }
   stages{
     stage('Cleanup workspace'){
@@ -72,6 +73,14 @@ pipeline{
           docker.withRegistry('', DOCKER_PASS) {
             docker_image.push("${IMAGE_TAG}")
           }
+        }
+      }
+    }
+
+    stage("Trigger CD pipeline"){
+      steps{
+        script{
+          sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X -POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://172.28.73.189:8080/job/discord_update_image_tag/buildWithParameters?token=discord-token'"
         }
       }
     }
