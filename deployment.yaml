@@ -5,7 +5,7 @@ metadata:
   labels:
     app: discord_fe
   spec:
-    replicas: 2
+    replicas: 1
     selector:
       matchLabels:
         app: discord_fe
